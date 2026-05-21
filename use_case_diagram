@@ -1,0 +1,12 @@
+digraph "Use Case Diagram" {
+	rankdir=LR
+	User [shape=actor]
+	System [label="Age and Gender Prediction System" shape=ellipse]
+	Upload [label="Upload Image" shape=ellipse]
+	PredictGender [label="Predict Gender" shape=ellipse]
+	PredictAge [label="Predict Age" shape=ellipse]
+	User -> Upload
+	Upload -> System
+	System -> PredictGender
+	System -> PredictAge
+}

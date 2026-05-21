@@ -1,0 +1,9 @@
+digraph "ER Diagram" {
+	Image [shape=box]
+	Gender [shape=box]
+	AgeRange [shape=box]
+	Classify [label=Classifies shape=diamond]
+	Image -> Classify
+	Classify -> Gender
+	Classify -> AgeRange
+}

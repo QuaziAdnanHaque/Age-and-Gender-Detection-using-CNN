@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age & Gender Recognition | AI Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4bb543;
+            --error-color: #ff4444;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .upload-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .upload-text span {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .result-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-details {
+            padding: 1rem;
+        }
+
+        .result-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            text-align: center;
+            padding: 1rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Age & Gender Recognition</h1>
+            <p>Upload an image to analyze age and gender using advanced AI</p>
+        </div>
+
+        <div class="upload-container">
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p class="upload-text">Drag and drop your image here or <span>click to browse</span></p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+        </div>
+
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Analyzing image...</p>
+        </div>
+
+        <div class="error-message"></div>
+
+        <div class="result-container">
+            <div class="result-grid">
+                <div class="image-preview-container">
+                    <img class="image-preview" src="" alt="Uploaded image">
+                </div>
+                <div class="result-details">
+                    <div class="result-item">
+                        <div class="result-label">Gender</div>
+                        <div class="result-value" id="genderResult"></div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="genderConfidence"></div>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Age Range</div>
+                        <div class="result-value" id="ageResult"></div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="ageConfidence"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const uploadArea = $('#uploadArea');
+            const fileInput = $('#fileInput');
+            
+            // Handle drag and drop
+            uploadArea.on('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.addClass('upload-area-active');
+            });
+
+            uploadArea.on('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.removeClass('upload-area-active');
+            });
+
+            uploadArea.on('drop', function(e) {
+                e.preventDefault();
+                uploadArea.removeClass('upload-area-active');
+                const files = e.originalEvent.dataTransfer.files;
+                handleFile(files[0]);
+            });
+
+            // Handle click upload
+            uploadArea.click(function() {
+                fileInput.click();
+            });
+
+            fileInput.change(function() {
+                handleFile(this.files[0]);
+            });
+
+            function handleFile(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    // Reset and show loading
+                    $('.error-message').hide();
+                    $('.result-container').hide();
+                    $('.loading').show();
+
+                    // Send to server
+                    $.ajax({
+                        url: '/predict',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            $('.loading').hide();
+                            
+                            if (response.error) {
+                                $('.error-message').text(response.error).show();
+                                return;
+                            }
+
+                            // Update results
+                            $('.image-preview').attr('src', '/static/' + response.image_path);
+                            $('#genderResult').text(response.gender.charAt(0).toUpperCase() + response.gender.slice(1));
+                            $('#ageResult').text(response.age_range);
+                            
+                            // Update confidence bars
+                            $('#genderConfidence').css('width', (response.confidence_scores.gender_confidence * 100) + '%');
+                            $('#ageConfidence').css('width', (response.confidence_scores.age_confidence * 100) + '%');
+                            
+                            $('.result-container').fadeIn();
+                        },
+                        error: function() {
+                            $('.loading').hide();
+                            $('.error-message').text('An error occurred while processing the image.').show();
+                        }
+                    });
+                } else {
+                    $('.error-message').text('Please upload a valid image file.').show();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

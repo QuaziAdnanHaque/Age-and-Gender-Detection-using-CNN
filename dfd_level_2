@@ -1,0 +1,12 @@
+digraph "DFD Level 2" {
+	UploadImage [label="Upload Image" shape=circle]
+	Preprocess [label="Preprocess Image" shape=circle]
+	GenderModel [label="Gender Model" shape=circle]
+	AgeModel [label="Age Model" shape=circle]
+	Database [label=Database shape=cylinder]
+	UploadImage -> Preprocess
+	Preprocess -> GenderModel
+	Preprocess -> AgeModel
+	GenderModel -> Database
+	AgeModel -> Database
+}

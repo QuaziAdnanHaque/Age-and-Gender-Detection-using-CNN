@@ -1,0 +1,6 @@
+digraph "DFD Level 0" {
+	User [shape=box]
+	System [label="Age and Gender Prediction System" shape=circle]
+	User -> System
+	System -> User
+}

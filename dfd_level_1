@@ -1,0 +1,11 @@
+digraph "DFD Level 1" {
+	User [shape=box]
+	UploadImage [label="Upload Image" shape=circle]
+	PredictGender [label="Predict Gender" shape=circle]
+	PredictAge [label="Predict Age" shape=circle]
+	User -> UploadImage
+	UploadImage -> PredictGender
+	UploadImage -> PredictAge
+	PredictGender -> User
+	PredictAge -> User
+}
