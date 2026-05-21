@@ -11,7 +11,7 @@ A complete, state-of-the-art Deep Learning project that performs real-time **Age
   * Two separate, gender-specific CNN models perform specialized **Age Range Classification** (`0-12`, `13-19`, `20-30`, `31-45`, `46-60`, `60+`) to maximize accuracy.
 * **Flask REST API Backend**: Receives image uploads, decodes them via OpenCV, feeds them to the deep learning models, and returns JSON prediction results in milliseconds.
 * **Interactive React Frontend**: A responsive, user-friendly client that allows users to upload/drag-and-drop face images, visualize them, and view high-fidelity gender/age predictions instantly.
-* **Comprehensive Engineering Diagrams**: Fully modeled Data Flow Diagrams (DFD Levels 0, 1, 2), Entity Relationship (ER) diagrams, and Use Case diagrams are provided to document the system architecture.
+* **Comprehensive Engineering Diagrams**: Fully modeled Entity Relationship (ER) and Use Case diagrams are provided to document the system architecture.
 
 ---
 
@@ -33,13 +33,9 @@ BTECH_PROJECT/
 ├── backend.py                 # Core Flask REST API Server
 ├── main.py                    # CNN model definition, training pipeline & evaluation
 ├── DATA.py                    # Dataset utility script
-├── finalyrproject.py          # Unified Python training/run script
 ├── index.html                 # Demo web landing page
 ├── er_diagram.png             # Database / Entity Relationship Diagram
 ├── use_case_diagram.png       # Use Case Diagram
-├── dfd_level_0.png            # Data Flow Diagram - Level 0
-├── dfd_level_1.png            # Data Flow Diagram - Level 1
-├── dfd_level_2.png            # Data Flow Diagram - Level 2
 └── README.md                  # Project Documentation (This file)
 ```
 
@@ -156,12 +152,6 @@ Describes the database entities, model inputs, and relationship schemas.
 ### Use Case Diagram
 Highlights the interactions between the end-user, the backend Flask middleware, and the underlying Keras classification engines.
 * See [use_case_diagram.png](use_case_diagram.png)
-
-### Data Flow Diagrams (DFD)
-Documents how image binary data streams from the front-end interface, undergoes transformation via OpenCV, and passes into the trained TensorFlow prediction layers:
-* **DFD Level 0**: [dfd_level_0.png](dfd_level_0.png)
-* **DFD Level 1**: [dfd_level_1.png](dfd_level_1.png)
-* **DFD Level 2**: [dfd_level_2.png](dfd_level_2.png)
 
 ---
 
